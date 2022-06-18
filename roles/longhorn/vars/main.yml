@@ -1,0 +1,3 @@
+---
+# vars file for longhorn
+LONG_HORN_FILE: /home/ubuntu/kubernetes/ansible/longhorn/roles/longhorn/files

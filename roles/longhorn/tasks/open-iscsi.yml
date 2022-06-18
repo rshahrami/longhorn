@@ -1,0 +1,99 @@
+---
+- name: upgrade all packages centos the first
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+- name: Upgrade debian family.
+  apt:
+    update_cache: yes
+    force_apt_get: yes
+    cache_valid_time: 3600
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update all packages to their latest version ubuntu
+  apt:
+    name: '*'
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+- name: Update packages to latest version ubuntu
+  apt:
+    upgrade: dist
+    force_apt_get: yes   
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: install epel-release the first
+  yum:
+    name: epel-release
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: install epel-release the second
+  yum:
+    name: epel-release
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+- name: upgrade all packages centos the second
+  yum:
+    name: '*'
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+
+
+- name: install jq on ubuntu
+  apt:
+    name: jq
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+
+
+- name: install jq on centos
+  yum:
+    name: jq
+    state: latest
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+- name: Using the Environment Check Script
+  shell: |
+    curl -sSfL https://raw.githubusercontent.com/longhorn/longhorn/v1.3.0/scripts/environment_check.sh | bash
+
+
+- name: install open-iscsi on ubuntu
+  apt:
+    name: open-iscsi
+    state: latest
+  when: ansible_distribution == "Ubuntu"
+
+
+- name: install open-iscsi on centos
+  shell: |
+    yum --setopt=tsflags=noscripts install iscsi-initiator-utils
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+
+- name: restart iscsid
+  service:
+    name: iscsid
+    state: started
+    enabled: yes
+
+- name: copy iscsi to kubernetes master
+  copy:
+    src: "{{ LONG_HORN_FILE }}/longhorn-iscsi-installation.yaml"
+    dest: /root/longhorn-iscsi-installation.yaml
+  when: inventory_hostname in groups['master_kuber']
+
+- name: install open-iscsi with kubernetes
+  shell: |
+    kubectl apply -f /root/longhorn-iscsi-installation.yaml
+  when: inventory_hostname in groups['master_kuber']

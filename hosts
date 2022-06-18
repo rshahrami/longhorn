@@ -1,0 +1,16 @@
+[nodes_kuber]
+kuber-master ansible_user=root
+kuber-worker1 ansible_user=root
+kuber-worker2 ansible_user=root
+kuber-worker3 ansible_user=root
+
+
+[master_kuber]
+kuber-master ansible_user=root
+
+[worker_kuber]
+kuber-worker1 ansible_user=root
+kuber-worker2 ansible_user=root
+kuber-worker3 ansible_user=root
+
+

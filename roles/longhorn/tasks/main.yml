@@ -1,0 +1,10 @@
+---
+# tasks file for longhorn
+- include: open-iscsi.yml
+  tags: open-iscsi
+
+- include: nfsv4.yml
+  tags: nfsv4
+
+- include: longhorn.yml
+  tags: longhorn

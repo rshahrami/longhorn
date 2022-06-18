@@ -1,0 +1,13 @@
+
+- name: copy iscsi to kubernetes master
+  copy:
+    src: "{{ LONG_HORN_FILE }}/longhorn.yaml"
+    dest: /root/longhorn.yaml
+  when: inventory_hostname in groups['master_kuber']
+
+
+- name: install open-iscsi on centos
+  shell: |
+    kubectl apply -f /root/longhorn.yaml
+  when: inventory_hostname in groups['master_kuber']
+  
