@@ -13,6 +13,7 @@ cat $input/longhorn-iscsi-installation.yaml | grep image: | cut -d ':' -f2,3 > t
 cat $input/longhorn-nfs-installation.yaml | grep image: | cut -d ':' -f2,3 >> temp
 cat $input/longhorn.yaml | grep longhornio/ | sed 's/image://g' | sed 's/value://g' | sed 's/"//g' | sed 's/- //g' >> temp
 
+sed -i 's/^[ \t]*//' temp
 
 while IFS= read -r line
 do
