@@ -3455,11 +3455,11 @@ spec:
     spec:
       initContainers:
       - name: wait-longhorn-admission-webhook
-        image: nexus:32002/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:v1.3.0
         command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-admission-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
       containers:
       - name: longhorn-manager
-        image: nexus:32002/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:v1.3.0
         imagePullPolicy: IfNotPresent
         securityContext:
           privileged: true
@@ -3468,15 +3468,15 @@ spec:
         - -d
         - daemon
         - --engine-image
-        - "nexus:32002/longhorn-engine:v1.3.0"
+        - "longhornio/longhorn-engine:v1.3.0"
         - --instance-manager-image
-        - "nexus:32002/longhorn-instance-manager:v1_20220611"
+        - "longhornio/longhorn-instance-manager:v1_20220611"
         - --share-manager-image
-        - "nexus:32002/longhorn-share-manager:v1_20220531"
+        - "longhornio/longhorn-share-manager:v1_20220531"
         - --backing-image-manager-image
-        - "nexus:32002/backing-image-manager:v3_20220609"
+        - "longhornio/backing-image-manager:v3_20220609"
         - --manager-image
-        - "nexus:32002/longhorn-manager:v1.3.0"
+        - "longhornio/longhorn-manager:v1.3.0"
         - --service-account
         - longhorn-service-account
         ports:
@@ -3552,18 +3552,18 @@ spec:
     spec:
       initContainers:
         - name: wait-longhorn-manager
-          image: nexus:32002/longhorn-manager:v1.3.0
+          image: longhornio/longhorn-manager:v1.3.0
           command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" http://longhorn-backend:9500/v1) != "200" ]; do echo waiting; sleep 2; done']
       containers:
         - name: longhorn-driver-deployer
-          image: nexus:32002/longhorn-manager:v1.3.0
+          image: longhornio/longhorn-manager:v1.3.0
           imagePullPolicy: IfNotPresent
           command:
           - longhorn-manager
           - -d
           - deploy-driver
           - --manager-image
-          - "nexus:32002/longhorn-manager:v1.3.0"
+          - "longhornio/longhorn-manager:v1.3.0"
           - --manager-url
           - http://longhorn-backend:9500/v1
           env:
@@ -3580,15 +3580,15 @@ spec:
               fieldRef:
                 fieldPath: spec.serviceAccountName
           - name: CSI_ATTACHER_IMAGE
-            value: "nexus:32002/csi-attacher:v3.4.0"
+            value: "longhornio/csi-attacher:v3.4.0"
           - name: CSI_PROVISIONER_IMAGE
-            value: "nexus:32002/csi-provisioner:v2.1.2"
+            value: "longhornio/csi-provisioner:v2.1.2"
           - name: CSI_NODE_DRIVER_REGISTRAR_IMAGE
-            value: "nexus:32002/csi-node-driver-registrar:v2.5.0"
+            value: "longhornio/csi-node-driver-registrar:v2.5.0"
           - name: CSI_RESIZER_IMAGE
-            value: "nexus:32002/csi-resizer:v1.2.0"
+            value: "longhornio/csi-resizer:v1.2.0"
           - name: CSI_SNAPSHOTTER_IMAGE
-            value: "nexus:32002/csi-snapshotter:v3.0.3"
+            value: "longhornio/csi-snapshotter:v3.0.3"
       serviceAccountName: longhorn-service-account
       securityContext:
         runAsUser: 0
@@ -3619,7 +3619,7 @@ spec:
     spec:
       containers:
       - name: longhorn-ui
-        image: nexus:32002/longhorn-ui:v1.3.0
+        image: longhornio/longhorn-ui:v1.3.0
         imagePullPolicy: IfNotPresent
         volumeMounts:
         - name : nginx-cache
@@ -3682,7 +3682,7 @@ spec:
               topologyKey: kubernetes.io/hostname
       containers:
       - name: longhorn-conversion-webhook
-        image: nexus:32002/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:v1.3.0
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 2000
@@ -3742,14 +3742,14 @@ spec:
               topologyKey: kubernetes.io/hostname
       initContainers:
       - name: wait-longhorn-conversion-webhook
-        image: nexus:32002/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:v1.3.0
         command: ['sh', '-c', 'while [ $(curl -m 1 -s -o /dev/null -w "%{http_code}" -k https://longhorn-conversion-webhook:9443/v1/healthz) != "200" ]; do echo waiting; sleep 2; done']
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 2000
       containers:
       - name: longhorn-admission-webhook
-        image: nexus:32002/longhorn-manager:v1.3.0
+        image: longhornio/longhorn-manager:v1.3.0
         imagePullPolicy: IfNotPresent
         securityContext:
           runAsUser: 2000

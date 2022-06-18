@@ -14,11 +14,16 @@ cat $input/longhorn-nfs-installation.yaml | grep image: | cut -d ':' -f2,3 >> te
 cat $input/longhorn.yaml | grep longhornio/ | sed 's/image://g' | sed 's/value://g' | sed 's/"//g' | sed 's/- //g' >> temp
 
 sed -i 's/^[ \t]*//' temp
+sort -u -o temp temp
 
 while IFS= read -r line
 do
-  echo "$line"
-  docker pull "$line"
+    echo "$line"
+    docker pull "$line"
+    for i in {1..2}
+    do
+        echo " "
+    done
 done < "$imagesList"
 
 for i in {1..2}
